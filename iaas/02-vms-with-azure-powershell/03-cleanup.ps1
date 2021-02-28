@@ -1,0 +1,4 @@
+
+Remove-AzResourceGroup `
+    -Name "demo"
+
