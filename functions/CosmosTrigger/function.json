@@ -1,0 +1,15 @@
+{
+    "bindings": [
+        {
+            "type": "cosmosDBTrigger",
+            "name": "documents",
+            "direction": "in",
+            "leaseCollectionName": "leases",
+            "connectionStringSetting": "CosmosDb",
+            "databaseName": "functions-demo",
+            "collectionName": "todo",
+            "createLeaseCollectionIfNotExists": true
+        }
+    ],
+    "scriptFile": "../dist/CosmosTrigger/index.js"
+}

@@ -1,0 +1,34 @@
+{
+    "bindings": [
+        {
+            "authLevel": "function",
+            "type": "httpTrigger",
+            "direction": "in",
+            "name": "req",
+            "methods": ["get", "post"]
+        },
+        {
+            "type": "http",
+            "direction": "out",
+            "name": "res"
+        },
+        {
+            "type": "cosmosDB",
+            "direction": "in",
+            "name": "document",
+            "databaseName": "functions-demo",
+            "collectionName": "todo",
+            "connectionStringSetting": "CosmosDb",
+            "id": "{Query.id}",
+            "partitionKey": "{Query.id}"
+        },
+        {
+            "type": "queue",
+            "direction": "out",
+            "name": "output",
+            "queueName": "functions-demo",
+            "connection": "AzureWebJobsStorage"
+        }
+    ],
+    "scriptFile": "../dist/HttpTrigger/index.js"
+}
