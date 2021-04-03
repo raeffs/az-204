@@ -1,7 +1,13 @@
 
+# https://docs.microsoft.com/en-us/cli/azure/vm?view=azure-cli-latest
+
 $subscription = "Visual Studio Enterprise Subscription – MPN"
 $location = "switzerlandnorth"
-$resourceGroup = "demo"
+$resourceGroup = "rg-az-204-virtual-machines"
+$id = Get-Random
+$windowsVm = "vm-windows-$id"
+$linuxVm = "vm-linux-$id"
+$username = "notarealadmin"
 
 az login
 az account set `
@@ -14,11 +20,10 @@ az group create `
     --name $resourceGroup `
     --location $location
 
-# create a windows vm and access it via remote desktop with username and password
+# list available images
+az vm image list
 
-$windowsVm = "demo-windows"
-$username = "notarealadmin"
-
+# create a windows vm
 az vm create `
     --resource-group $resourceGroup `
     --name $windowsVm `
@@ -26,21 +31,19 @@ az vm create `
     --admin-username $username `
     --admin-password "supersecret#2021"
 
+# open rdp port
 az vm open-port `
     --resource-group $resourceGroup `
     --name $windowsVm `
     --port "3389"
 
+# get the public ip
 az vm list-ip-addresses `
     --resource-group $resourceGroup `
     --name $windowsVm `
     --output table
 
-# create a linux vm and access it via ssh with keypair
-
-$linuxVm = "demo-linux"
-$username = "notarealadmin"
-
+# create a linux vm
 az vm create `
     --resource-group $resourceGroup `
     --name $linuxVm `
@@ -49,11 +52,13 @@ az vm create `
     --authentication-type "ssh" `
     --ssh-key-value "$env:HOME\.ssh\id_rsa.pub"
 
+# open ssh port
 az vm open-port `
     --resource-group $resourceGroup `
     --name $linuxVm `
     --port "22"
 
+# get the public ip
 az vm list-ip-addresses `
     --resource-group $resourceGroup `
     --name $linuxVm `
