@@ -1,11 +1,13 @@
 
+# https://docs.microsoft.com/en-us/cli/azure/cosmosdb?view=azure-cli-latest
+
 $subscription = "Visual Studio Enterprise Subscription – MPN"
 $location = "switzerlandnorth"
-$resourceGroup = "demo"
-
-$accountName = "demo-cosmosdb-$(Get-Random)"
-$dbName = "demo-cosmosdb"
-$containerName = "demo-cosmosdb-container"
+$resourceGroup = "rg-az-204-cosmos-db"
+$id = Get-Random
+$accountName = "cosmos-account-$id"
+$dbName = "cosmos-db-$id"
+$containerName = "cosmos-db-container-$id"
 
 az login
 az account set `
