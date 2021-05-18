@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: seq
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: seq
+    template:
+        metadata:
+            labels:
+                app: seq
+        spec:
+            containers:
+                - name: seq
+                  image: datalust/seq:latest
+                  ports:
+                      - containerPort: 80
+                      - containerPort: 5341
+                  env:
+                      - name: ACCEPT_EULA
+                        value: "Y"
+                  volumeMounts:
+                      - mountPath: /data
+                        name: data
+            volumes:
+                - name: data
+                  persistentVolumeClaim:
+                      claimName: azure-managed-disk
