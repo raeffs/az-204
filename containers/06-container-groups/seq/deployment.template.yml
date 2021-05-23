@@ -1,0 +1,71 @@
+api-version: 2021-03-01
+location: PLACEHOLDER_LOCATION
+name: seq
+properties:
+  containers:
+    - name: caddy
+      properties:
+        image: caddy:latest
+        command:
+          [
+            "caddy",
+            "reverse-proxy",
+            "--from",
+            "PLACEHOLDER_FCDN",
+            "--to",
+            "localhost:8080",
+          ]
+        ports:
+          - port: 80
+            protocol: TCP
+          - port: 443
+            protocol: TCP
+        resources:
+          requests:
+            cpu: 0.5
+            memoryInGB: 0.5
+        volumeMounts:
+          - name: caddy-data
+            mountPath: /data
+    - name: seq
+      properties:
+        image: datalust/seq:latest
+        ports:
+          - port: 8080
+            protocol: TCP
+        resources:
+          requests:
+            cpu: 0.5
+            memoryInGB: 0.5
+        volumeMounts:
+          - mountPath: /data
+            name: seq-data
+        environmentVariables:
+          - name: ACCEPT_EULA
+            value: "Y"
+          - name: SEQ_API_LISTENURIS
+            value: "http://localhost:8080"
+  volumes:
+    - name: caddy-data
+      azureFile:
+        shareName: PLACEHOLDER_CADDY_SHARE_NAME
+        readOnly: false
+        storageAccountName: PLACEHOLDER_STORAGE_ACCOUNT_NAME
+        storageAccountKey: PLACEHOLDER_STORAGE_ACCOUNT_KEY
+    - name: seq-data
+      azureFile:
+        shareName: PLACEHOLDER_SEQ_SHARE_NAME
+        readOnly: false
+        storageAccountName: PLACEHOLDER_STORAGE_ACCOUNT_NAME
+        storageAccountKey: PLACEHOLDER_STORAGE_ACCOUNT_KEY
+  ipAddress:
+    ports:
+      - port: 80
+        protocol: TCP
+      - port: 443
+        protocol: TCP
+    type: Public
+    dnsNameLabel: PLACEHOLDER_DNS_NAME_LABEL
+  osType: Linux
+tags: null
+type: Microsoft.ContainerInstance/containerGroups
